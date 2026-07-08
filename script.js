@@ -3,6 +3,7 @@ const searchBtn=document.querySelector(".search-btn");
 const temp=document.querySelector(".temp");
 const cityName=document.querySelector(".city-name");
 const weatherTxt=document.querySelector(".text");
+const max_min=document.querySelector(".max-min");
 const humidity=document.querySelector(".humidity span:last-child");
 const uv=document.querySelector(".uv span:last-child");
 const dayTime=document.querySelector(".day-time");
@@ -19,10 +20,14 @@ const getWeather = async (typedWord) =>{
             alert(weather.error.message);
             return;
         }
+        const weekday=new Date(weather.location.localtime).toLocaleDateString("en-US",{
+            weekday:"long"
+        });
         content.style.display = "block";
         console.log(weather.current);
         temp.innerHTML=Math.round(weather.current.temp_c) + "°C";
-        dayTime.innerHTML=weather.location.localtime;
+        const time=weather.location.localtime.slice(10,16);
+        dayTime.innerHTML=`${weekday} ${time}`;
         cityName.innerHTML=weather.location.name;
         humidity.innerHTML=weather.current.humidity + "%";
         uv.innerHTML=weather.current.uv;
@@ -74,8 +79,8 @@ const getForecast= async(typedWord) =>{
         card.innerHTML = `
         <h3>${weekday}</h3>
         <img src="https:${day.day.condition.icon}">
-        <small>${Math.round(day.day.maxtemp_c)}°C</small>
-        <small>${Math.round(day.day.mintemp_c)}°C</small>
+        <small>𝐇:${Math.round(day.day.maxtemp_c)}°C</small>
+        <small> 𝐋:${Math.round(day.day.mintemp_c)}°C</small>
         `;
         forecastContainer.appendChild(card);
     });
