@@ -9,6 +9,7 @@ const dayTime=document.querySelector(".day-time");
 const midBg=document.querySelector(".sunrise-pic");
 const pressure=document.querySelector(".pressure span:last-child");
 const content=document.querySelector(".weather-card");
+const forecastContainer=document.querySelector(".forecast-container");
 const apiKey = "52a472fde13d46cbb50124320260607";
 const getWeather = async (typedWord) =>{
         const URL = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${typedWord}`;
@@ -58,6 +59,28 @@ const changeBg = (weather) =>{
         }
     }
 }
+const getForecast= async(typedWord) =>{
+    const URL2=`https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${typedWord}&days=6`;
+    let response=await fetch(URL2);
+    let forecastData=await response.json();
+    console.log(forecastData.forecast.forecastday);
+    forecastContainer.innerHTML="";
+    forecastData.forecast.forecastday.slice(1).forEach(day => {
+        let card = document.createElement("div");
+        card.className = "forecast-card";
+        const weekday=new Date(day.date).toLocaleDateString("en-US",{
+        weekday:"short"
+    });
+        card.innerHTML = `
+        <h3>${weekday}</h3>
+        <img src="https:${day.day.condition.icon}">
+        <small>${Math.round(day.day.maxtemp_c)}°C</small>
+        <small>${Math.round(day.day.mintemp_c)}°C</small>
+        `;
+        forecastContainer.appendChild(card);
+    });
+};
+
 searchBtn.addEventListener("click",() =>{
     const typedWord = input.value;
     if(typedWord.trim()===""){
@@ -65,6 +88,7 @@ searchBtn.addEventListener("click",() =>{
     }
     else{  
         getWeather(typedWord);
+        getForecast(typedWord);
      
     }
 });
