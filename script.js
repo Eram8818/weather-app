@@ -94,11 +94,12 @@ searchBtn.addEventListener("click",() =>{
     else{  
         getWeather(typedWord);
         getForecast(typedWord);
-     
+        input.value="";
     }
 });
 input.addEventListener("keydown",(event) =>{
     if(event.key==="Enter"){
         searchBtn.click();
+        input.value="";
     }
 });
